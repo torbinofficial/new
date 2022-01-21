@@ -4,7 +4,7 @@ import telebot
 TOKEN = "5256439483:AAE3tgBHSGWf1Ex51BTd9ahF1EeUDd6F4RM"
 bot=telebot.TeleBot(TOKEN)
 
-@bot.message_handler(commands=['test'])
+@bot.message_handler()
 def handle_start_help(message):
     # print("FUCK")
     # week = date.today().isocalendar()[1] % 2 + 1
