@@ -16,6 +16,6 @@ def handle_start_help(message):
     #     handle.close()
     # else:
     #     data = "Сегодня пар нет!"
-    bot.reply_to(message, "FUCK")
+    bot.send_message(message.chat.id, "FUCK")
 
 bot.polling(none_stop=True)
