@@ -6,7 +6,7 @@ bot=telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['test'])
 def handle_start_help(message):
-    print("FUCK")
+    # print("FUCK")
     # week = date.today().isocalendar()[1] % 2 + 1
     # day = calendar.day_name[date.today().weekday()]
     # if ((day != "Sunday") and (day != "Saturday")):
@@ -16,6 +16,6 @@ def handle_start_help(message):
     #     handle.close()
     # else:
     #     data = "Сегодня пар нет!"
-    # bot.reply_to(message, data)
+    bot.reply_to(message, "FUCK")
 
 bot.polling(none_stop=True)
