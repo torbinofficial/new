@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import telebot
 
-TOKEN = "5215290543:AAEzpfrfbNN4pAGzEn66oCskb-CxafDwFlk"
+TOKEN = "5256439483:AAE3tgBHSGWf1Ex51BTd9ahF1EeUDd6F4RM"
 bot=telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['test'])
