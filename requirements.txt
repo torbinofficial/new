@@ -1,3 +1,4 @@
 pytelegrambotapi
 dropbox
 pandas
+openpyxl
