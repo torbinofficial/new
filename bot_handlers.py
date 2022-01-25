@@ -3,7 +3,7 @@ import telebot
 import dropbox
 
 DROPBOX_TOKEN = "0c2FLOlpeLMAAAAAAAAAAb9obp9hAZUxInCh5qCRoUh2A094mQOTrCJLvvpNP4gx"
-TOKEN = "5256439483:AAE3tgBHSGWf1Ex51BTd9ahF1EeUDd6F4RM"
+TOKEN = "5298849535:AAEAcppc5zfA1D88YTOZGxPqaYLBUnOtNmE"
 bot=telebot.TeleBot(TOKEN)
 import pandas as pd
 def dropbox_connect():
@@ -242,7 +242,7 @@ def reposts(message):
                     text += "Админ " + str(row['Тег админа']) + "канала " + str(row['Тег канала']) + " репостнул "
             for index, row in channels.iterrows():
                 if(row['id канала'] == message.forward_from_chat.id):
-                    text += "канал"+ str(row['Тег канала']) + " админа " + str(row['Тег админа']) 
+                    text += " канал"+ str(row['Тег канала']) + " админа " + str(row['Тег админа']) 
             for index, row in chats.iterrows():
                 bot.send_message(chat_id = row['id'], text = text)
 bot.polling(none_stop=True)
