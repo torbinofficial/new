@@ -72,7 +72,10 @@ def add_channel_id(message):
         bot.send_message(message.chat.id, text = "Операция успешна")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
-
+@bot.message_handler(commands=['list'])
+def list_channels(message):
+    link = "https://www.dropbox.com/sh/zhjlyve0ak9lpn6/AAATEZLXs00tUowdEpZdP6mua?dl=0"
+    bot.send_message(message.chat.id, text = link)
 @bot.message_handler(commands=['list'])
 def list_channels(message):
     try:
