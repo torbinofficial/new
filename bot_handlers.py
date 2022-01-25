@@ -97,7 +97,8 @@ def help(message):
     message8 = "/ delChannel <id> - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
     message9 = "/ delChat - удалить текущий чат (нужно быть суперадмином) \n" 
     message10 = "/ getId - внутри чата, получить свой текущий id, на канале - id канала \n" 
-    message11 = "/ list - список каналов \n"  
+    message11 = "/ link - ссылка на базу данных \n"  
+    message12 = "/ list - список каналов \n" 
     text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11
     bot.send_message(message.chat.id, text = text)
 
