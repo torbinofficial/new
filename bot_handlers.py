@@ -72,6 +72,32 @@ def add_channel_id(message):
         bot.send_message(message.chat.id, text = "Операция успешна")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
+        
+
+@bot.message_handler(commands=['addChannel'])
+def add_channel_id(message):
+    try:
+        args =  message.text.split("?")
+        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
+        df = pd.read_excel('Book.xlsx', index_col=0)
+#         id_ = message.chat.id
+#         tag_ = str(message.chat.username)
+#         title_ = str(message.chat.title)
+        for index, row in df.iterrows():
+            if row['id канала'] == id_:
+                bot.send_message(message.chat.id, text = "Канал уже добавлен!")
+                return
+        df.loc[df.shape[0]] = [args[1], args[2], args[3], args[4], args[5], args[6]]
+        print(df)
+        # print(df[df['id'] == -1001662709181].index.values)
+        df.to_excel("Book.xlsx", sheet_name = "channels")
+        dbx = dropbox_connect()
+        dbx.files_delete("/hitler-bot/Book.xlsx")
+        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
+        bot.send_message(message.chat.id, text = "Операция успешна")
+    except:
+        bot.send_message(message.chat.id, text = "Произошла ошибка!")        
+        
 @bot.message_handler(commands=['link'])
 def list_channels(message):
     link = "https://www.dropbox.com/sh/zhjlyve0ak9lpn6/AAATEZLXs00tUowdEpZdP6mua?dl=0"
