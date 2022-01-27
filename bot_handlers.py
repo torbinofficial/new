@@ -118,7 +118,8 @@ def list_channels(message):
 #             bot.send_message(message.chat.id, text = mess)
 #         except:
 #             lenn = len(texxt) % 4
-        bot.send_message(message.chat.id, text = strr)
+        strrr = ' '.join(strr.split())
+        bot.send_message(message.chat.id, text = strrr)
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
  
