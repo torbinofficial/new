@@ -105,15 +105,19 @@ def list_channels(message):
 @bot.message_handler(commands=['list'])
 def list_channels(message):
     try:
-        texxt = ""
+        texxt = []
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
         df = pd.read_excel('Book.xlsx', index_col=0)
-         for index, row in channels.iterrows():
-             texxt += " Канал "+ str(row['Название канала']) + ", " + str(row['Тег канала']) + ". Админ - " + str(row['Имя админа'] + ", " + str(row['Тег админа']) + ", категории -" + str(row['Категория']) + '\n'
-             if ((index+1) % 5 == 0):
-                  bot.send_message(message.chat.id, text = texxt)
-                  texxt = ""s
-       
+        strr = df.to_string()
+#         for index, row in channels.iterrows():
+#             texxt.append(Канал "+ str(row['Название канала']) + ",  + str(row['Тег канала']) + " . Админ - " + str(row['Имя админа'] + ", " + str(row['Тег админа']) + ", категории -" + str(row['Категория']) + "\n")
+#         try:
+#             for i in range(0, 4, len(texxt):
+#                 mess = texxt[i] + texxt[i+1] + texxt[i+2] + texxt[i+3]
+#             bot.send_message(message.chat.id, text = mess)
+#         except:
+#             lenn = len(texxt) % 4
+        bot.send_message(message.chat.id, text = strr)
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
  
