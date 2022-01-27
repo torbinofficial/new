@@ -59,7 +59,7 @@ def add_channel_id(message):
         tag_ = str(message.chat.username)
         title_ = str(message.chat.title)
         for index, row in df.iterrows():
-            if row['id канала'] == args[1]:
+            if row['id канала'] == id_:
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
                 return
         df.loc[df.shape[0]] = [id_, tag_, title_, args[1], args[2], args[3]]
@@ -84,7 +84,7 @@ def add_channel_id(message):
 #         tag_ = str(message.chat.username)
 #         title_ = str(message.chat.title)
         for index, row in df.iterrows():
-            if row['id канала'] == id_:
+            if row['id канала'] == args[1]:
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
                 return
         df.loc[df.shape[0]] = [args[1], args[2], args[3], args[4], args[5], args[6]]
