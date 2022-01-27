@@ -108,7 +108,7 @@ def list_channels(message):
         texxt = []
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
         df = pd.read_excel('Book.xlsx', index_col=0)
-        df.drop(columns=['id канала'])
+        df = df.drop(columns=['id канала'])
         strr = df.to_string()
 #         for index, row in channels.iterrows():
 #             texxt.append(Канал "+ str(row['Название канала']) + ",  + str(row['Тег канала']) + " . Админ - " + str(row['Имя админа'] + ", " + str(row['Тег админа']) + ", категории -" + str(row['Категория']) + "\n")
