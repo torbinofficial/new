@@ -87,7 +87,7 @@ def add_channel_id(message):
             if row['id канала'] == args[1]:
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
                 return
-        df.loc[df.shape[0]] = [args[1], args[2], args[3], args[4], args[5], str(args[6]) + '\n']
+        df.loc[df.shape[0]] = [args[1], args[2], args[3], args[4], args[5], args[6]]
         print(df)
         # print(df[df['id'] == -1001662709181].index.values)
         df.to_excel("Book.xlsx", sheet_name = "channels")
@@ -105,13 +105,17 @@ def list_channels(message):
 @bot.message_handler(commands=['list'])
 def list_channels(message):
     try:
-        texxt = []
+        strrrr = ""
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
         df = pd.read_excel('Book.xlsx', index_col=0)
         df = df.drop(columns=['id канала'])
-        strr = df.to_string()
-        strrr = ' '.join(strr.split())
-        bot.send_message(message.chat.id, text = strrr)
+        for i in range(0, df.shape[0]):
+            strr = df.loc[i].to_string()
+            strrr = ' '.join(strr.split())
+            strrrr += strrr
+#         strr = df.to_string()
+#         strrr = ' '.join(strr.split())
+        bot.send_message(message.chat.id, text = strrrr)
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
  
