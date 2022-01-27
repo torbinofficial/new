@@ -115,6 +115,7 @@ def list_channels(message):
          strrr = strrr.replace('Тег админа', ' админ -  ')
          strrr = strrr.replace('Имя админа', ' ')
          strrr = strrr.replace('Тег канала', 'Канал ')
+         strrr = strrr.replace('Категория', ' ,категории - ')
          strrrr += strrr
 #         strr = df.to_string()
 #         strrr = ' '.join(strr.split())
