@@ -107,7 +107,7 @@ def list_channels(message):
     try:
         strrrr = ""
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
+        df = pd.read_excel('Book.xlsx', index_col=0, header=False)
         df = df.drop(columns=['id канала'])
         for i in range(0, df.shape[0]):
             strr = df.loc[i].to_string()
