@@ -115,8 +115,8 @@ def list_channels(message):
 #         strr = df.to_string()
 #         strrr = ' '.join(strr.split())
     bot.send_message(message.chat.id, text = strrrr)
-    except:
-        bot.send_message(message.chat.id, text = "Произошла ошибка!")
+#     except:
+#         bot.send_message(message.chat.id, text = "Произошла ошибка!")
  
 @bot.message_handler(commands = ['help'])
 def help(message):
