@@ -110,7 +110,7 @@ def list_channels(message):
     df = df.drop(columns=['id канала'])
     for i in range(0, df.shape[0]):
          strr = df.iloc[i].to_string()
-         strrr = ' '.join(strr.split())
+         strrr = ' '.join(strr.split()) + '\n'
          strrrr += strrr
 #         strr = df.to_string()
 #         strrr = ' '.join(strr.split())
