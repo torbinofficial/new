@@ -110,9 +110,10 @@ def list_channels(message):
         df = pd.read_excel('Book.xlsx', index_col=0)
          for index, row in channels.iterrows():
              texxt += " Канал "+ str(row['Название канала']) + ", " + str(row['Тег канала']) + ". Админ - " + str(row['Имя админа'] + ", " + str(row['Тег админа']) + ", категории -" + str(row['Категория']) + '\n'
-#         for item in range(0, df.shape[0]):
-#             texxt += str(item) + ". \n" + df.iloc[item].to_string()
-        bot.send_message(message.chat.id, text = texxt)
+             if ((index+1) % 5 == 0):
+                  bot.send_message(message.chat.id, text = texxt)
+                  texxt = ""s
+       
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
  
