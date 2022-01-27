@@ -109,7 +109,7 @@ def list_channels(message):
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
         df = pd.read_excel('Book.xlsx', index_col=0)
         for item in range(0, df.shape[0]):
-            stringg = str(item) + ". \n" + df.iloc[item].to_string()
+            text += str(item) + ". \n" + df.iloc[item].to_string()
         bot.send_message(message.chat.id, text = stringg)
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
