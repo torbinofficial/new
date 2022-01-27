@@ -87,7 +87,7 @@ def add_channel_id(message):
             if row['id канала'] == args[1]:
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
                 return
-        df.loc[df.shape[0]] = [args[1], args[2], args[3], args[4], args[5], args[6]]
+        df.loc[df.shape[0]] = [args[1], args[2], args[3], args[4], args[5], str(args[6]) + '\n']
         print(df)
         # print(df[df['id'] == -1001662709181].index.values)
         df.to_excel("Book.xlsx", sheet_name = "channels")
@@ -110,14 +110,6 @@ def list_channels(message):
         df = pd.read_excel('Book.xlsx', index_col=0)
         df = df.drop(columns=['id канала'])
         strr = df.to_string()
-#         for index, row in channels.iterrows():
-#             texxt.append(Канал "+ str(row['Название канала']) + ",  + str(row['Тег канала']) + " . Админ - " + str(row['Имя админа'] + ", " + str(row['Тег админа']) + ", категории -" + str(row['Категория']) + "\n")
-#         try:
-#             for i in range(0, 4, len(texxt):
-#                 mess = texxt[i] + texxt[i+1] + texxt[i+2] + texxt[i+3]
-#             bot.send_message(message.chat.id, text = mess)
-#         except:
-#             lenn = len(texxt) % 4
         strrr = ' '.join(strr.split())
         bot.send_message(message.chat.id, text = strrr)
     except:
