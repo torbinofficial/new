@@ -112,10 +112,10 @@ def list_channels(message):
          strr = df.iloc[i].to_string()
          strrr = ' '.join(strr.split()) + '\n' + '\n'
          strrr = strrr.replace('Название канала', ' ')
-         strrr = strrr.replace('Тег админа', ' админ -  ')
+         strrr = strrr.replace('Тег админа', '\nАдмин -  ')
          strrr = strrr.replace('Имя админа', ' ')
          strrr = strrr.replace('Тег канала', 'Канал ')
-         strrr = strrr.replace('Категория', '\n Категории:')
+         strrr = strrr.replace('Категория', '\nКатегории:')
          strrrr += strrr
 #         strr = df.to_string()
 #         strrr = ' '.join(strr.split())
