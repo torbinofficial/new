@@ -150,7 +150,7 @@ def edit_channel_tag(message):
         print(str(args[1]) + '\n')
         print(args[2])
         print("I AM IN FOR")
-        if row['id канала'] == args[1]:
+        if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
             print("FOUND ID")
             df.at[index,'Тег канала'] = args[2]
             df.to_excel("Book.xlsx", sheet_name = "channels")
