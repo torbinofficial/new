@@ -54,7 +54,7 @@ def add_channel_id_by_post(message):
     try:
         args =  message.text.split("?")
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
+        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
         id_ = message.chat.id
         tag_ = str(message.chat.username)
         title_ = str(message.chat.title)
@@ -78,7 +78,7 @@ def add_channel_id_by_message(message):
     try:
         args =  message.text.split("?")
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
+        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
         for index, row in df.iterrows():
             if row['id канала'] == args[1]:
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
@@ -98,7 +98,7 @@ def add_channel_id_by_message(message):
 def add_admin(message):
     try:
         dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0)
+        admins = pd.read_excel("Admins.xlsx", index_col= 0, engine='openpyxl')
         for index, row in admins.iterrows():
             if row['id'] == message.text.split()[1]:
                 bot.send_message(message.chat.id, text = "Админ уже добавлен!")
@@ -122,7 +122,7 @@ def add_chat(message):
         dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
         df = pd.read_excel('Chats.xlsx', index_col=0)
         dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0)
+        admins = pd.read_excel("Admins.xlsx", index_col= 0, engine='openpyxl')
         for index, row in df.iterrows():
             if row['id'] == message.chat.id:
                 bot.send_message(message.chat.id, text = "Чат уже добавлен в рассылку!")
@@ -145,7 +145,7 @@ def edit_channel_tag(message):
     try:
         args = message.text.split("?")
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
+        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
         for index, row in df.iterrows():
             print(row['id канала'])
             print(str(args[1]) + '\n')
@@ -167,7 +167,7 @@ def edit_channel_tag(message):
 def edit_channel_title(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
+    df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
     try:
         for index, row in df.iterrows():
             if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
@@ -186,7 +186,7 @@ def edit_channel_title(message):
 def edit_admin_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
+    df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
     try:
         for index, row in df.iterrows():
             if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
@@ -205,7 +205,7 @@ def edit_admin_tag(message):
 def edit_admin_title(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
+    df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
     try:
         for index, row in df.iterrows():
             if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
@@ -223,7 +223,7 @@ def edit_admin_title(message):
 def edit_category(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
+    df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
     try:
         for index, row in df.iterrows():
             if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
@@ -241,9 +241,9 @@ def edit_category(message):
 def del_channel(message):
     try:
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
+        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
         dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0)
+        admins = pd.read_excel("Admins.xlsx", index_col= 0, engine='openpyxl')
         for index, row in admins.iterrows():
             if row['id канала'] == message.from_user.id:
                 id_ = message.text.split()[1]
@@ -261,7 +261,7 @@ def del_channel(message):
 def del_channel_id(message):
     try:
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
+        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
         id_ = message.chat.id
         tag_ = str(message.chat.username)
         title_ = str(message.chat.title)
@@ -279,9 +279,9 @@ def del_channel_id(message):
 def del_channel_id(message):
     try:
         dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
-        df = pd.read_excel('Chats.xlsx', index_col=0)
+        df = pd.read_excel('Chats.xlsx', index_col=0, engine='openpyxl')
         dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0)
+        admins = pd.read_excel("Admins.xlsx", index_col= 0, engine='openpyxl')
         for index, row in admins.iterrows():
             if row['id канала'] == message.from_user.id:
                 id_ = message.chat.id
@@ -304,7 +304,7 @@ def list_channels(message):
 def list_channels(message):
     strrrr = ""
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
+    df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
     df = df.drop(columns=['id канала'])
     for i in range(0, df.shape[0]):
          strr = df.iloc[i].to_string()
@@ -361,8 +361,8 @@ def reposts(message):
 #     print(str(message.forward_from_chat.id))
     dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    channels = pd.read_excel('Book.xlsx', index_col=0)
-    chats = pd.read_excel('Chats.xlsx', index_col=0)
+    channels = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
+    chats = pd.read_excel('Chats.xlsx', index_col=0, engine='openpyxl')
 #     print("")
     if message.forward_from_chat != None:
         print("FIRST IF")
