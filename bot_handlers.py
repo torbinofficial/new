@@ -382,9 +382,8 @@ def reposts(message):
 @bot.message_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])        
 def add_channel_id_by_forward(message):        
     if (message.forward_from_chat != None and message.chat.type == 'private'):
-        print()
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
+        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
         for index, row in df.iterrows():
             if row['id канала'] == message.forward_from_chat.id:
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
