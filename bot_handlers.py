@@ -379,9 +379,9 @@ def reposts(message):
             for index, row in chats.iterrows():
                 print("FIFTH IF")
                 bot.send_message(chat_id = row['id'], text = text)
-@bot.message_handler()        
+@bot.channel_post_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])        
 def add_channel_id_by_forward(message):        
-    if (message.forward_from_chat != None):
+    if ((message.forward_from_chat != None) and (message.chat.type == 'private')):
         print(message.chat.type)
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
         df = pd.read_excel('Book.xlsx', index_col=0)
