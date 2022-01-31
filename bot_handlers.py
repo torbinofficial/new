@@ -270,13 +270,18 @@ def reposts(message):
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     channels = pd.read_excel('Book.xlsx', index_col=0)
     chats = pd.read_excel('Chats.xlsx', index_col=0)
+    print("DATA LOADED")
     if message.forward_from_message_id != None:
+        print("FIRST IF")
         if (channels['id канала'].isin([message.forward_from_chat.id]).any()):
+            print("SECOND IF")
             for index, row in channels.iterrows():
                 if(row['id канала'] == message.chat.id):
+                    print("THIRD IF")
                     text += "Админ " + str(row['Тег админа']) + "канала " + str(row['Тег канала']) + " репостнул "
             for index, row in channels.iterrows():
                 if(row['id канала'] == message.forward_from_chat.id):
+                    print("FOURTH IF")
                     text += " канал"+ str(row['Тег канала']) + " админа " + str(row['Тег админа']) 
             for index, row in chats.iterrows():
                 bot.send_message(chat_id = row['id'], text = text)
