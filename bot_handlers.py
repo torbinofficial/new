@@ -265,7 +265,7 @@ def get_user_id(message):
 def get_channel_id(message):
     bot.send_message(message.chat.id, str(message.chat.id))
 
-@bot.channel_post_handler(content_types=types.ContentType.ANY])
+@bot.channel_post_handler(content_types=types.ContentType.ANY)
 def reposts(message):
     text = ""
 #     print(str(message.forward_from_chat.id))
