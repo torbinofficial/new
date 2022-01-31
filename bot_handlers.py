@@ -276,7 +276,7 @@ def reposts(message):
 #     print("")
     if message.forward_from_chat != None:
         print("FIRST IF")
-        if (channels['id канала'].isin([message.forward_from_chat.id]).any()):
+        if (channels['id канала'].isin([message.forward_from_chat.id]).any() and channels['id канала'].isin([message.chat.id]).any()):
             print("SECOND IF")
             for index, row in channels.iterrows():
                 if(row['id канала'] == message.chat.id):
