@@ -399,7 +399,7 @@ def add_channel_id_by_forward(message):
         df.to_excel("Book.xlsx", sheet_name = "channels")
         dbx = dropbox_connect()
         dbx.files_delete("/hitler-bot/Book.xlsx")
-        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
+        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx") 
         bot.send_message(message.chat.id, text = "Операция успешна")
         print(df)
 #     except:
