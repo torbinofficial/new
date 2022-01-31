@@ -304,7 +304,7 @@ def list_channels(message):
 def list_channels(message):
     strrrr = ""
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
+    df = pd.read_excel('Book.xlsx', index_col=0)
     df = df.drop(columns=['id канала'])
     for i in range(0, df.shape[0]):
          strr = df.iloc[i].to_string()
