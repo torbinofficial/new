@@ -271,7 +271,7 @@ def reposts(message):
     channels = pd.read_excel('Book.xlsx', index_col=0)
     chats = pd.read_excel('Chats.xlsx', index_col=0)
     if message.forward_from_message_id != None:
-        if (channels['id канала'].isin([message.forward_from_chat.id]).any() and channels['id канала'].isin([message.chat.id]).any()):
+        if (channels['id канала'].isin([message.forward_from_chat.id]).any()):
             for index, row in channels.iterrows():
                 if(row['id канала'] == message.chat.id):
                     text += "Админ " + str(row['Тег админа']) + "канала " + str(row['Тег канала']) + " репостнул "
