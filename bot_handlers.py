@@ -145,18 +145,17 @@ def edit_channel_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
-    try:
-        for index, row in df.iterrows():
-            if row['id канала'] == args[1]:
-                df.at[index,'Тег канала'] = args[2]
-                df.to_excel("Book.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Book.xlsx")
-                dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-                bot.send_message(message.chat.id, text = "Операция успешна")
-                return
-    except:
-        bot.send_message(message.chat.id, text = "Произошла ошибка!")
+    for index, row in df.iterrows():
+        if row['id канала'] == args[1]:
+            print("FOUND ID")
+            df.at[index,'Тег канала'] = args[2]
+            df.to_excel("Book.xlsx", sheet_name = "channels")
+            dbx = dropbox_connect()
+            dbx.files_delete("/hitler-bot/Book.xlsx")
+            dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
+            bot.send_message(message.chat.id, text = "Операция успешна")
+            return
+    
 
 @bot.message_handler(commands=['editChannelTitle'])
 def edit_channel_title(message):
