@@ -381,7 +381,8 @@ def reposts(message):
                 bot.send_message(chat_id = row['id'], text = text)
 @bot.message_handler()        
 def add_channel_id_by_forward(message):        
-    if (message.forward_from_chat != None and message.chat.type == 'private'):
+    if (message.forward_from_chat != None):
+        print(message.chat.type)
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
         df = pd.read_excel('Book.xlsx', index_col=0)
         for index, row in df.iterrows():
