@@ -389,7 +389,7 @@ def add_channel_id_by_forward(message):
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
                 return
         channel_id = message.forward_from_chat.id
-        channel_tag = message.forward_from_chat.username
+        channel_tag = "@" + str(message.forward_from_chat.username)
         channel_title = message.forward_from_chat.title
         admin_tag = message.from_user.username
         print(message.from_user.first_name)
