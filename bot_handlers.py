@@ -380,27 +380,26 @@ def reposts(message):
                 print("FIFTH IF")
                 bot.send_message(chat_id = row['id'], text = text)
 @bot.message_handler()        
-def add_channel_id_by_forward(message):
-    try:        
-        if (message.forward_from_chat != None and message.chat.type == 'private'):
-            dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-            df = pd.read_excel('Book.xlsx', index_col=0)
-            for index, row in df.iterrows():
-                if row['id канала'] == message.forward_from_chat.id:
-                    bot.send_message(message.chat.id, text = "Канал уже добавлен!")
-                    return
-            channel_id = message.from_chat.id
-            channel_tag = message.from_chat.username
-            channel_title = message.from_chat.title
-            admin_tag = message.from_user.username
-            admin_title = message.from_user.first_name + message.from_user.last_name
-            df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
-            dbx = dropbox_connect()
-            dbx.files_delete("/hitler-bot/Book.xlsx")
-            dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-            bot.send_message(message.chat.id, text = "Операция успешна")
-    except:
-        bot.send_message(message.chat.id, text = "Произошла ошибка!")                        
+def add_channel_id_by_forward(message):        
+    if (message.forward_from_chat != None and message.chat.type == 'private'):
+        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
+        df = pd.read_excel('Book.xlsx', index_col=0)
+        for index, row in df.iterrows():
+            if row['id канала'] == message.forward_from_chat.id:
+                bot.send_message(message.chat.id, text = "Канал уже добавлен!")
+                return
+        channel_id = message.from_chat.id
+        channel_tag = message.from_chat.username
+        channel_title = message.from_chat.title
+        admin_tag = message.from_user.username
+        admin_title = message.from_user.first_name + message.from_user.last_name
+        df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
+        dbx = dropbox_connect()
+        dbx.files_delete("/hitler-bot/Book.xlsx")
+        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
+        bot.send_message(message.chat.id, text = "Операция успешна")
+#     except:
+#     bot.send_message(message.chat.id, text = "Произошла ошибка!")                        
                 
 bot.polling(none_stop=True)
 
