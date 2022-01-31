@@ -395,9 +395,9 @@ def add_channel_id_by_forward(message):
         admin_tag = message.from_user.username
         if (message.from_user.first_name != None and message.from_user.last_name != None):
             admin_title = message.from_user.first_name + message.from_user.last_name
-        else if ( message.from_user.first_name != None):
+        elif ( message.from_user.first_name != None):
             admin_title = message.from_user.first_name
-        else if( message.from_user.last_name != None):
+        elif( message.from_user.last_name != None):
             admin_title = message.from_user.last_name      
         df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
         df.to_excel("Book.xlsx", sheet_name = "channels")
