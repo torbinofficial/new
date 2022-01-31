@@ -274,7 +274,7 @@ def reposts(message):
     channels = pd.read_excel('Book.xlsx', index_col=0)
     chats = pd.read_excel('Chats.xlsx', index_col=0)
 #     print("")
-    if message.forward_from_chat.id != None:
+    if message.forward_from_chat != None:
         print("FIRST IF")
         if (channels['id канала'].isin([message.forward_from_chat.id]).any()):
             print("SECOND IF")
