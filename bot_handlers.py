@@ -328,14 +328,14 @@ def help(message):
     message3 = "2. / addChannel ? @тег админа ? имя админа ? категория канала \n" 
     message4 = "ИЛИ \n переслать пост с канала боту в лс \n \n \n" 
     message5 = "/ addChannel ? @тег админа ? имя админа ? категория канала - добавить КАНАЛ в список"
-    message6 = "/ addChat - добавить ЧАТ (нужно быть суперадмином)"
+    message6 = "/ addChat - добавить ЧАТ для рассылки (нужно быть суперадмином)"
     message7 = "/ addAdmin - добавить суперадмина \n"
     message8 = "/ edit... ? id ? новое значение - изменить соответствующий параметр канала с id"
-    message8 = "/ delChannel <id> - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
-    message9 = "/ delChat - удалить текущий чат (нужно быть суперадмином) \n" 
-    message10 = "/ getId - внутри чата, получить свой текущий id, на канале - id канала \n" 
-    message11 = "/ link - ссылка на базу данных \n"  
-    message12 = "/ list - список каналов \n" 
+    message9 = "/ delChannel <id> - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
+    message10 = "/ delChat - удалить текущий чат (нужно быть суперадмином) \n" 
+    message11 = "/ getId - внутри чата, получить свой текущий id, на канале - id канала \n" 
+    message12 = "/ link - ссылка на базу данных \n"  
+    message13 = "/ list - список каналов \n" 
     text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11
     bot.send_message(message.chat.id, text = text)
 
