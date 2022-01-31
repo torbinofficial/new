@@ -284,5 +284,6 @@ def reposts(message):
                     print("FOURTH IF")
                     text += " канал"+ str(row['Тег канала']) + " админа " + str(row['Тег админа']) 
             for index, row in chats.iterrows():
+                print("FIFTH IF")
                 bot.send_message(chat_id = row['id'], text = text)
 bot.polling(none_stop=True)
