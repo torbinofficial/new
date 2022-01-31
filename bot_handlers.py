@@ -392,6 +392,8 @@ def add_channel_id_by_forward(message):
         channel_tag = message.forward_from_chat.username
         channel_title = message.forward_from_chat.title
         admin_tag = message.from_user.username
+        print(message.from_user.first_name)
+        print( message.from_user.last_name)
         if (message.from_user.first_name != "" and message.from_user.last_name != ""):
             admin_title = message.from_user.first_name + message.from_user.last_name
         elif ( message.from_user.first_name != ""):
