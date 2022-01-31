@@ -314,41 +314,7 @@ def del_channel_id(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-# dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-# df = pd.DataFrame(columns=['id канала', 'Тег канала', 'Название канала', 'Тег админа', 'Имя админа', 'Категория'])
-# df.loc[df.shape[0]] = ['0', '0', '0', '0', '0', '0']
-# temp = df.to_excel("Book.xlsx")
-# dbx = dropbox_connect()
-# dbx.files_delete("/hitler-bot/Book.xlsx")
-# dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-
-
-@bot.channel_post_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])
-def reposts(message):
-    text = ""
-#     print(str(message.forward_from_chat.id))
-    dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    channels = pd.read_excel('Book.xlsx', index_col=0)
-    chats = pd.read_excel('Chats.xlsx', index_col=0)
-#     print("")
-    if message.forward_from_chat != None:
-        print("FIRST IF")
-        if (channels['id канала'].isin([message.forward_from_chat.id]).any()):
-            print("SECOND IF")
-            for index, row in channels.iterrows():
-                if(row['id канала'] == message.chat.id):
-                    print("THIRD IF")
-                    text += str(row['Тег админа']).replace(' ', '') + " " + str(row['Тег канала']).replace(' ', '') + " репостнул "
-            for index, row in channels.iterrows():
-                if(row['id канала'] == message.forward_from_chat.id):
-                    print("FOURTH IF")
-                    text += str(row['Тег канала']).replace(' ', '') + " " + str(row['Тег админа']).replace(' ', '')
-            for index, row in chats.iterrows():
-                print("FIFTH IF")
-                bot.send_message(chat_id = row['id'], text = text)
-bot.polling(none_stop=True)
-
+        
 @bot.message_handler(commands=['link'])
 def list_channels(message):
     link = "https://www.dropbox.com/sh/zhjlyve0ak9lpn6/AAATEZLXs00tUowdEpZdP6mua?dl=0"
@@ -398,4 +364,40 @@ def get_user_id(message):
 
 @bot.channel_post_handler(commands=['getId'])
 def get_channel_id(message):
-    bot.send_message(message.chat.id, str(message.chat.id))
+    bot.send_message(message.chat.id, str(message.chat.id))        
+# dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
+# df = pd.DataFrame(columns=['id канала', 'Тег канала', 'Название канала', 'Тег админа', 'Имя админа', 'Категория'])
+# df.loc[df.shape[0]] = ['0', '0', '0', '0', '0', '0']
+# temp = df.to_excel("Book.xlsx")
+# dbx = dropbox_connect()
+# dbx.files_delete("/hitler-bot/Book.xlsx")
+# dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
+
+
+@bot.channel_post_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])
+def reposts(message):
+    text = ""
+#     print(str(message.forward_from_chat.id))
+    dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
+    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
+    channels = pd.read_excel('Book.xlsx', index_col=0)
+    chats = pd.read_excel('Chats.xlsx', index_col=0)
+#     print("")
+    if message.forward_from_chat != None:
+        print("FIRST IF")
+        if (channels['id канала'].isin([message.forward_from_chat.id]).any()):
+            print("SECOND IF")
+            for index, row in channels.iterrows():
+                if(row['id канала'] == message.chat.id):
+                    print("THIRD IF")
+                    text += str(row['Тег админа']).replace(' ', '') + " " + str(row['Тег канала']).replace(' ', '') + " репостнул "
+            for index, row in channels.iterrows():
+                if(row['id канала'] == message.forward_from_chat.id):
+                    print("FOURTH IF")
+                    text += str(row['Тег канала']).replace(' ', '') + " " + str(row['Тег админа']).replace(' ', '')
+            for index, row in chats.iterrows():
+                print("FIFTH IF")
+                bot.send_message(chat_id = row['id'], text = text)
+bot.polling(none_stop=True)
+
+
