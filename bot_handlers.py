@@ -49,7 +49,7 @@ def dropbox_upload_file(local_file, dropbox_file_path):
     except Exception as e:
         print('Error uploading file to Dropbox: ' + str(e))
 
-@bot.channel_post_handler(commands=['addChannel'])
+@bot.channel_post_handler(commands=['add_channel'])
 def add_channel_id_by_post(message):
     try:
         args =  message.text.split("?")
@@ -73,7 +73,7 @@ def add_channel_id_by_post(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
         
-@bot.message_handler(commands=['addChannel'])
+@bot.message_handler(commands=['add_channel'])
 def add_channel_id_by_message(message):
     try:
         args =  message.text.split("?")
@@ -94,7 +94,7 @@ def add_channel_id_by_message(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")        
         
-@bot.message_handler(commands=['addAdmin'])
+@bot.message_handler(commands=['add_admin'])
 def add_admin(message):
     try:
         dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
@@ -116,7 +116,7 @@ def add_admin(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['addChat'])
+@bot.message_handler(commands=['add_chat'])
 def add_chat(message):
     try:
         dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
@@ -140,7 +140,7 @@ def add_chat(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['editChannelTag'])
+@bot.message_handler(commands=['edit_channel_tag'])
 def edit_channel_tag(message):
     try:
         args = message.text.split("?")
@@ -163,7 +163,7 @@ def edit_channel_tag(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['editChannelTitle'])
+@bot.message_handler(commands=['edit_channel_title'])
 def edit_channel_title(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -182,7 +182,7 @@ def edit_channel_title(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['editAdminTag'])
+@bot.message_handler(commands=['edit_admin_tag'])
 def edit_admin_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -201,7 +201,7 @@ def edit_admin_tag(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['editAdminTitle'])
+@bot.message_handler(commands=['edit_admin_title'])
 def edit_admin_title(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -219,7 +219,7 @@ def edit_admin_title(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['editCategory'])
+@bot.message_handler(commands=['edit_category'])
 def edit_category(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -237,7 +237,7 @@ def edit_category(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands = ['delChannel'])
+@bot.message_handler(commands = ['del_channel'])
 def del_channel(message):
     try:
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -257,7 +257,7 @@ def del_channel(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.channel_post_handler(commands=['delChannel'])
+@bot.channel_post_handler(commands=['del_channel'])
 def del_channel_id(message):
     try:
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -275,7 +275,7 @@ def del_channel_id(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['delChat'])
+@bot.message_handler(commands=['del_chat'])
 def del_channel_id(message):
     try:
         dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
@@ -325,26 +325,26 @@ def list_channels(message):
 def help(message):
     message1 = "Порядок действий: \n" 
     message2 = "1. Добавить бота на каналы и сделать админом \n" 
-    message3 = "2. / addChannel ? @тег админа ? имя админа ? категория канала \n" 
+    message3 = "2. / add_channel ? @тег админа ? имя админа ? категория канала \n" 
     message4 = "ИЛИ \n переслать пост с канала боту в лс \n \n \n" 
-    message5 = "/ addChannel ? @тег админа ? имя админа ? категория канала - добавить КАНАЛ в список"
-    message6 = "/ addChat - добавить ЧАТ для рассылки (нужно быть суперадмином) \n"
-    message7 = "/ addAdmin - добавить суперадмина \n"
+    message5 = "/ add_channel ? @тег админа ? имя админа ? категория канала - добавить КАНАЛ в список"
+    message6 = "/ add_chat - добавить ЧАТ для рассылки (нужно быть суперадмином) \n"
+    message7 = "/ add_admin - добавить суперадмина \n"
     message8 = "/ edit... ? id ? новое значение - изменить соответствующий параметр канала с id \n"
-    message9 = "/ delChannel <id> - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
-    message10 = "/ delChat - удалить текущий чат (нужно быть суперадмином) \n" 
-    message11 = "/ getId - внутри чата, получить свой текущий id, на канале - id канала \n" 
+    message9 = "/ del_channel <id> - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
+    message10 = "/ del_chat - удалить текущий чат (нужно быть суперадмином) \n" 
+    message11 = "/ get_id - внутри чата, получить свой текущий id, на канале - id канала \n" 
     message12 = "/ link - ссылка на базу данных \n"  
     message13 = "/ list - список каналов \n" 
     text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11
     bot.send_message(message.chat.id, text = text)
 
-@bot.message_handler(commands=['getId'])
+@bot.message_handler(commands=['get_id'])
 def get_user_id(message):
     bot.send_message(message.chat.id, str(message.from_user.id))
 
 
-@bot.channel_post_handler(commands=['getId'])
+@bot.channel_post_handler(commands=['get_id'])
 def get_channel_id(message):
     bot.send_message(message.chat.id, str(message.chat.id))        
 # dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
