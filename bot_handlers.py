@@ -50,7 +50,7 @@ def dropbox_upload_file(local_file, dropbox_file_path):
         print('Error uploading file to Dropbox: ' + str(e))
 
 @bot.channel_post_handler(commands=['addChannel'])
-def add_channel_id(message):
+def add_channel_id_by_post(message):
     try:
         args =  message.text.split("?")
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -74,7 +74,7 @@ def add_channel_id(message):
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
         
 @bot.message_handler(commands=['addChannel'])
-def add_channel_id(message):
+def add_channel_id_by_message(message):
     try:
         args =  message.text.split("?")
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -93,8 +93,9 @@ def add_channel_id(message):
         bot.send_message(message.chat.id, text = "Операция успешна")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")        
+        
 @bot.message_handler()        
-def add_channel_id(message):
+def add_channel_id_by_forward(message):
     try:        
         if (message.forward_from_chat != None and message.chat.type == 'private'):
             dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -182,7 +183,7 @@ def edit_channel_tag(message):
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['editChannelTitle'])
-def edit_channel_tag(message):
+def edit_channel_title(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
@@ -201,7 +202,7 @@ def edit_channel_tag(message):
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['editAdminTag'])
-def edit_channel_tag(message):
+def edit_admin_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
@@ -220,7 +221,7 @@ def edit_channel_tag(message):
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['editAdminTitle'])
-def edit_channel_tag(message):
+def edit_admin_title(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
@@ -238,7 +239,7 @@ def edit_channel_tag(message):
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['editCategory'])
-def edit_channel_tag(message):
+def edit_category(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
