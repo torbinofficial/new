@@ -266,7 +266,7 @@ def get_channel_id(message):
 @bot.channel_post_handler()
 def reposts(message):
     text = ""
-    print(str(message.forward_from_chat.id))
+#     print(str(message.forward_from_chat.id))
     dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     channels = pd.read_excel('Book.xlsx', index_col=0)
