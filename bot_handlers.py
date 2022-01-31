@@ -400,6 +400,7 @@ def add_channel_id_by_forward(message):
         dbx.files_delete("/hitler-bot/Book.xlsx")
         dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
         bot.send_message(message.chat.id, text = "Операция успешна")
+        print(df)
 #     except:
 #     bot.send_message(message.chat.id, text = "Произошла ошибка!")                        
                 
