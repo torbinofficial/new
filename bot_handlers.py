@@ -281,11 +281,11 @@ def reposts(message):
             for index, row in channels.iterrows():
                 if(row['id канала'] == message.chat.id):
                     print("THIRD IF")
-                    text += "Админ " + str(row['Тег админа']) + "канала " + str(row['Тег канала']) + " репостнул "
+                    text += str(row['Тег админа']) + " " + str(row['Тег канала']) + " репостнул "
             for index, row in channels.iterrows():
                 if(row['id канала'] == message.forward_from_chat.id):
                     print("FOURTH IF")
-                    text += " канал"+ str(row['Тег канала']) + " админа " + str(row['Тег админа']) 
+                    text += str(row['Тег канала']) + " " + str(row['Тег админа']) 
             for index, row in chats.iterrows():
                 print("FIFTH IF")
                 bot.send_message(chat_id = row['id'], text = text)
