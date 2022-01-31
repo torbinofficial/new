@@ -146,6 +146,7 @@ def edit_channel_tag(message):
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
     for index, row in df.iterrows():
+        print(row['id канала'])
         print(str(args[1]) + '\n')
         print(args[2])
         print("I AM IN FOR")
