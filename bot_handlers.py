@@ -397,7 +397,9 @@ def add_channel_id_by_forward(message):
         print(message.from_user.first_name)
         print( message.from_user.last_name)
         admin_title = message.from_user.first_name   
+        print(df.shape[0])
         df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
+        print(df.loc[df.shape[0]])
         df.to_excel("Book.xlsx", sheet_name = "channels")
         dbx = dropbox_connect()
         dbx.files_delete("/hitler-bot/Book.xlsx")
