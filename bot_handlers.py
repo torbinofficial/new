@@ -325,17 +325,17 @@ def list_channels(message):
 def help(message):
     message1 = "Порядок действий: \n" 
     message2 = "1. Добавить бота на каналы и сделать админом \n" 
-    message3 = "2. `/add_channel ? @тег админа ? имя админа ? категория канала` \n" 
+    message3 = "2. <code> /add_channel ? @тег админа ? имя админа ? категория канала</code> \n" 
     message4 = "ИЛИ \n переслать пост с канала боту в лс \n \n \n" 
-    message5 = "`/add_channel ? @тег админа ? имя админа ? категория канала` - добавить КАНАЛ в список \n"
-    message6 = "`/add_chat` - добавить ЧАТ для рассылки (нужно быть суперадмином) \n"
-    message7 = "`/add_admin` - добавить суперадмина \n"
-    message8 = "`/edit... ? id ? новое значение` - изменить соответствующий параметр канала с id \n"
-    message9 = "`/del_channel <id>` - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
-    message10 = "`/del_chat` - удалить текущий чат (нужно быть суперадмином) \n" 
-    message11 = "`/get_id` - внутри чата, получить свой текущий id, на канале - id канала \n" 
-    message12 = "`/link` - ссылка на базу данных \n"  
-    message13 = "`/list` - список каналов \n" 
+    message5 = "<code> /add_channel ? @тег админа ? имя админа ? категория канала </code> - добавить КАНАЛ в список \n"
+    message6 = "<code> /add_chat </code> - добавить ЧАТ для рассылки (нужно быть суперадмином) \n"
+    message7 = "<code> /add_admin </code> - добавить суперадмина \n"
+    message8 = "<code> /edit... ? id ? новое значение </code> - изменить соответствующий параметр канала с id \n"
+    message9 = " <code> /del_channel <id> </code> - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
+    message10 = "<code> /del_chat </code> - удалить текущий чат (нужно быть суперадмином) \n" 
+    message11 = "<code> /get_id </code> - внутри чата, получить свой текущий id, на канале - id канала \n" 
+    message12 = "<code> /link </code> - ссылка на базу данных \n"  
+    message13 = "<code> /list </code> - список каналов \n" 
     text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11
     bot.send_message(message.chat.id, text = text)
 
