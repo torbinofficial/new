@@ -398,7 +398,7 @@ def add_channel_id_by_forward(message):
         print( message.from_user.last_name)
         admin_title = message.from_user.first_name   
         print(df)
-        df.append({'id канала': channel_id, 'Тег канала': channel_tag, 'Название канала' : channel_title, 'Тег админа':admin_tag, 'Имя админа' : admin_title, 'Категория' : "Empty"}, ignore_index = True)
+        df = df.append({'id канала': channel_id, 'Тег канала': channel_tag, 'Название канала' : channel_title, 'Тег админа':admin_tag, 'Имя админа' : admin_title, 'Категория' : "Empty"}, ignore_index = True)
 #         df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
 #         print(df.loc[df.shape[0]])
         df.to_excel("Book.xlsx", sheet_name = "channels")
