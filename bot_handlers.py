@@ -373,7 +373,7 @@ def list_channels(message):
          strrrr += strrr
 #         strr = df.to_string()
 #         strrr = ' '.join(strr.split())
-    telegraph.edit_page("https://telegra.ph/channels-list-02-01", "Список каналов", html_content="<p>" + strrrr + "</p>")
+    telegraph.create_page("Список каналов", html_content="<p>" + strrrr + "</p>")
     bot.send_message(message.chat.id, text = "https://telegra.ph/channels-list-02-01")
 #     except:
 #         bot.send_message(message.chat.id, text = "Произошла ошибка!")
