@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import telebot
 import dropbox
-from telegraph import Telegraph
 DROPBOX_TOKEN = "0c2FLOlpeLMAAAAAAAAAAb9obp9hAZUxInCh5qCRoUh2A094mQOTrCJLvvpNP4gx"
 TOKEN = "5298849535:AAEAcppc5zfA1D88YTOZGxPqaYLBUnOtNmE"
 bot=telebot.TeleBot(TOKEN)
@@ -356,25 +355,27 @@ def list_channels(message):
     bot.send_message(message.chat.id, text = link)
 @bot.message_handler(commands=['list'])
 def list_channels(message):
-    telegraph = Telegraph()
-    telegraph.create_account(short_name='1488')
     strrrr = ""
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
     df = df.drop(columns=['id канала'])
     for i in range(0, df.shape[0]):
          strr = df.iloc[i].to_string()
-         strrr = ' '.join(strr.split()) + '<br>' + '<br>'
+         strrr = ' '.join(strr.split()) + '\n' + '\n'
          strrr = strrr.replace('Название канала', ' ')
-         strrr = strrr.replace('Тег админа', '<br> Админ - ')
+         strrr = strrr.replace('Тег админа', '\n Админ - ')
          strrr = strrr.replace('Имя админа', ' ')
          strrr = strrr.replace('Тег канала', 'Канал ')
-         strrr = strrr.replace('Категория', '<br> Категории:')
+         strrr = strrr.replace('Категория', '\n Категории:')
          strrrr += strrr
 #         strr = df.to_string()
 #         strrr = ' '.join(strr.split())
-    telegraph.create_page("Список каналов", html_content="<p>" + strrrr + "</p>")
-    bot.send_message(message.chat.id, text = "https://telegra.ph/channels-list-02-01")
+    if len(strrrr) > 4096:
+        for x in range(0, len(strrrr), 4096):
+            bot.send_message(message.chat.id, strrrr[x:x+4096])
+    else:
+        bot.send_message(message.chat.id, strrrr)
+#         bot.send_message(message.chat.id, text = "https://telegra.ph/channels-list-02-01")
 #     except:
 #         bot.send_message(message.chat.id, text = "Произошла ошибка!")
  
