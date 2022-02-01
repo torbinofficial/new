@@ -391,20 +391,21 @@ def add_channel_id_by_forward(message):
                 bot.send_message(message.chat.id, text = "Канал уже добавлен!")
                 return
         channel_id = message.forward_from_chat.id
-        channel_tag = "@" + str(message.forward_from_chat.username)
+        channel_tag = "@" + str(message.forward_from_chat.username).replace("@", "")
         channel_title = message.forward_from_chat.title
-        admin_tag = message.from_user.username
+        admin_tag = "@" + str(message.from_user.username).replace("@", "")
         print(message.from_user.first_name)
         print( message.from_user.last_name)
         admin_title = message.from_user.first_name   
-        print(df.shape[0])
-        df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
-        print(df.loc[df.shape[0]])
+        print(df)
+        df.append({'id канала': channel_id, 'Тег канала': channel_tag, 'Название канала' : channel_title, 'Тег админа':admin_tag, 'Имя админа' : admin_title, 'Категория' : "Empty"}, ignore_index = True)
+#         df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
+#         print(df.loc[df.shape[0]])
         df.to_excel("Book.xlsx", sheet_name = "channels")
         dbx = dropbox_connect()
         dbx.files_delete("/hitler-bot/Book.xlsx")
         dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx") 
-        bot.send_message(message.chat.id, text = "Операция успешна, id канала - " + str(channel_id))
+        bot.send_message(message.chat.id, text = "Операция успешна, id канала: " + str(channel_id))
         print(df)
 #     except:
 #     bot.send_message(message.chat.id, text = "Произошла ошибка!")                        
