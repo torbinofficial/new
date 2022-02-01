@@ -326,10 +326,11 @@ def help(message):
     message1 = "Порядок действий: \n" 
     message2 = "1 Добавить бота на каналы и сделать админом \n" 
     message3 = "2 Переслать пост с канала боту в лс \n \n \n"  
+    message4 = "3 Прописать команду ВНУТРИ ЛС БОТА"
     message5 = "` /add_channel ? @тег админа ? имя админа ? категория канала ` \- добавить КАНАЛ в список \n"
     message6 = "` /add_chat ` \- добавить ЧАТ для рассылки, но нужно быть суперадмином \n"
     message7 = "` /add_admin ` \- добавить суперадмина \n"
-    message8 = "` /edit<value> ? id ? @new_tag ` \- изменить параметр канала с id \n"
+    message8 = "` /edit<value> ? id ? @new_tag ` \- изменить параметр канала с соответсвующим id \n "
     message9 = " ` /del_channel <id> ` \- удалить канал, но нужно быть суперадмином \n" 
     message10 = "` /del_chat ` \- удалить текущий чат, но нужно быть суперадмином \n" 
     message11 = "` /get_id ` \- внутри чата, получить свой текущий id, на канале \- id канала \n" 
@@ -401,7 +402,7 @@ def add_channel_id_by_forward(message):
         dbx = dropbox_connect()
         dbx.files_delete("/hitler-bot/Book.xlsx")
         dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx") 
-        bot.send_message(message.chat.id, text = "Операция успешна")
+        bot.send_message(message.chat.id, text = "Операция успешна, id канала - " + str(channel_id))
         print(df)
 #     except:
 #     bot.send_message(message.chat.id, text = "Произошла ошибка!")                        
