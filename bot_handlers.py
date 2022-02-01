@@ -328,16 +328,16 @@ def help(message):
     message3 = "2 Переслать пост с канала боту в лс "  
     message4 = "3 Прописать команду /edit_category ? id канала ? категории канала ВНУТРИ ЛС БОТА \n \n \n"
     message5 = ""
-    message6 = "` /add_chat ` \- добавить ЧАТ для рассылки, но нужно быть суперадмином \n"
-    message7 = "` /add_admin ` \- добавить суперадмина \n"
-    message8 = "` /edit\.\.\. ? id ? value ` \- изменить параметр value канала с соответсвующим id, возможные варианты доступны по нажатию /  "
-    message9 = " ` /del_channel ? id ` \- удалить канал, но нужно быть суперадмином \n" 
-    message10 = "` /del_chat ` \- удалить текущий чат, но нужно быть суперадмином \n" 
-    message11 = "` /get_id ` \- внутри чата, получить свой текущий id, на канале \- id канала \n" 
-    message12 = "` /link ` \- ссылка на базу данных \n"  
-    message13 = "` /list ` \- список каналов \n" 
+    message6 = "<code> /add_chat </code> - добавить ЧАТ для рассылки, но нужно быть суперадмином \n"
+    message7 = "<code> /add_admin </code> - добавить суперадмина \n"
+    message8 = "<code> /edit... ? id ? value </code> - изменить параметр value канала с соответсвующим id, возможные варианты доступны по нажатию /  "
+    message9 = " <code> /del_channel ? id </code> - удалить канал, но нужно быть суперадмином \n" 
+    message10 = "<code> /del_chat </code> - удалить текущий чат, но нужно быть суперадмином \n" 
+    message11 = "<code> /get_id </code> - внутри чата, получить свой текущий id, на канале \- id канала \n" 
+    message12 = "<code> /link </code> - ссылка на базу данных \n"  
+    message13 = "<code> /list </code> - список каналов \n" 
     text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11 + message12 + message13
-    bot.send_message(message.chat.id, text = text, parse_mode = "MarkdownV2")
+    bot.send_message(message.chat.id, text = text, parse_mode = "HTML")
 
 @bot.message_handler(commands=['get_id'])
 def get_user_id(message):
