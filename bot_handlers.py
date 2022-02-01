@@ -337,7 +337,7 @@ def help(message):
     message12 = "<code> /link </code> - ссылка на базу данных \n"  
     message13 = "<code> /list </code> - список каналов \n" 
     text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11
-    bot.send_message(message.chat.id, text = text)
+    bot.send_message(message.chat.id, text = text, parse_mode = "HTML")
 
 @bot.message_handler(commands=['get_id'])
 def get_user_id(message):
