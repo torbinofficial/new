@@ -325,7 +325,7 @@ def list_channels(message):
 def help(message):
     message1 = "Порядок действий: \n" 
     message2 = "1 Добавить бота на каналы и сделать админом \n" 
-    message3 = "2 Переслать пост с канала боту в лс "  
+    message3 = "2 Переслать пост с канала боту в лс \n"  
     message4 = "3 Прописать команду <code> /edit_category ? id канала ? категории </code> канала ВНУТРИ ЛС БОТА \n \n \n"
     message5 = "" 
     message6 = "<code> /add_chat </code> - добавить ЧАТ для рассылки, но нужно быть суперадмином \n"
