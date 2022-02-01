@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import telebot
 import dropbox
-
+from telegraph import Telegraph
 DROPBOX_TOKEN = "0c2FLOlpeLMAAAAAAAAAAb9obp9hAZUxInCh5qCRoUh2A094mQOTrCJLvvpNP4gx"
 TOKEN = "5298849535:AAEAcppc5zfA1D88YTOZGxPqaYLBUnOtNmE"
 bot=telebot.TeleBot(TOKEN)
@@ -49,12 +49,12 @@ def dropbox_upload_file(local_file, dropbox_file_path):
     except Exception as e:
         print('Error uploading file to Dropbox: ' + str(e))
 
-@bot.channel_post_handler(commands=['add_channel'])
-def add_channel_id_by_post(message):
+@bot.channel_post_handler(commands=['addChannel'])
+def add_channel_id(message):
     try:
         args =  message.text.split("?")
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
+        df = pd.read_excel('Book.xlsx', index_col=0)
         id_ = message.chat.id
         tag_ = str(message.chat.username)
         title_ = str(message.chat.title)
@@ -73,8 +73,8 @@ def add_channel_id_by_post(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
         
-@bot.message_handler(commands=['add_channel'])
-def add_channel_id_by_message(message):
+@bot.message_handler(commands=['addChannel'])
+def add_channel_id(message):
     try:
         args =  message.text.split("?")
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -93,12 +93,35 @@ def add_channel_id_by_message(message):
         bot.send_message(message.chat.id, text = "Операция успешна")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")        
-        
-@bot.message_handler(commands=['add_admin'])
+@bot.message_handler()        
+def add_channel_id(message):
+    try:        
+        if (message.forward_from_chat != None and message.chat.type == 'private'):
+            dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
+            df = pd.read_excel('Book.xlsx', index_col=0)
+            for index, row in df.iterrows():
+                if row['id канала'] == message.forward_from_chat.id:
+                    bot.send_message(message.chat.id, text = "Канал уже добавлен!")
+                    return
+            channel_id = message.from_chat.id
+            channel_tag = message.from_chat.username
+            channel_title = message.from_chat.title
+            admin_tag = message.from_user.username
+            admin_title = message.from_user.first_name + message.from_user.last_name
+            df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
+            dbx = dropbox_connect()
+            dbx.files_delete("/hitler-bot/Book.xlsx")
+            dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
+            bot.send_message(message.chat.id, text = "Операция успешна")
+    except:
+        bot.send_message(message.chat.id, text = "Произошла ошибка!")        
+
+
+@bot.message_handler(commands=['addAdmin'])
 def add_admin(message):
     try:
         dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0, engine='openpyxl')
+        admins = pd.read_excel("Admins.xlsx", index_col= 0)
         for index, row in admins.iterrows():
             if row['id'] == message.text.split()[1]:
                 bot.send_message(message.chat.id, text = "Админ уже добавлен!")
@@ -116,7 +139,7 @@ def add_admin(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['add_chat'])
+@bot.message_handler(commands=['addChat'])
 def add_chat(message):
     try:
         dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
@@ -140,19 +163,14 @@ def add_chat(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['edit_channel_tag'])
+@bot.message_handler(commands=['editChannelTag'])
 def edit_channel_tag(message):
+    args = message.text.split("?")
+    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
+    df = pd.read_excel('Book.xlsx', index_col=0)
     try:
-        args = message.text.split("?")
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
         for index, row in df.iterrows():
-            print(row['id канала'])
-            print(str(args[1]) + '\n')
-            print(args[2])
-            print("I AM IN FOR")
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
-                print("FOUND ID")
+            if row['id канала'] == args[1]:
                 df.at[index,'Тег канала'] = args[2]
                 df.to_excel("Book.xlsx", sheet_name = "channels")
                 dbx = dropbox_connect()
@@ -163,14 +181,14 @@ def edit_channel_tag(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['edit_channel_title'])
-def edit_channel_title(message):
+@bot.message_handler(commands=['editChannelTitle'])
+def edit_channel_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
     try:
         for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
+            if row['id канала'] == args[1]:
                 df.at[index,'Название канала'] = args[2]
                 df.to_excel("Book.xlsx", sheet_name = "channels")
                 dbx = dropbox_connect()
@@ -182,14 +200,14 @@ def edit_channel_title(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['edit_admin_tag'])
-def edit_admin_tag(message):
+@bot.message_handler(commands=['editAdminTag'])
+def edit_channel_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
     try:
         for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
+            if row['id канала'] == args[1]:
                 df.at[index,'Тег админа'] = args[2]
                 df.to_excel("Book.xlsx", sheet_name = "channels")
                 dbx = dropbox_connect()
@@ -201,14 +219,14 @@ def edit_admin_tag(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['edit_admin_title'])
-def edit_admin_title(message):
+@bot.message_handler(commands=['editAdminTitle'])
+def edit_channel_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
     try:
         for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
+            if row['id канала'] == args[1]:
                 df.at[index,'Имя админа'] = args[2]
                 df.to_excel("Book.xlsx", sheet_name = "channels")
                 dbx = dropbox_connect()
@@ -219,14 +237,14 @@ def edit_admin_title(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['edit_category'])
-def edit_category(message):
+@bot.message_handler(commands=['editCategory'])
+def edit_channel_tag(message):
     args = message.text.split("?")
     dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
     df = pd.read_excel('Book.xlsx', index_col=0)
     try:
         for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
+            if row['id канала'] == args[1]:
                 df.at[index,'Категория'] = args[2]
                 df.to_excel("Book.xlsx", sheet_name = "channels")
                 dbx = dropbox_connect()
@@ -237,7 +255,7 @@ def edit_category(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands = ['del_channel'])
+@bot.message_handler(commands = ['delChannel'])
 def del_channel(message):
     try:
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -257,7 +275,7 @@ def del_channel(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.channel_post_handler(commands=['del_channel'])
+@bot.channel_post_handler(commands=['delChannel'])
 def del_channel_id(message):
     try:
         dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
@@ -275,7 +293,7 @@ def del_channel_id(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.message_handler(commands=['del_chat'])
+@bot.message_handler(commands=['delChat'])
 def del_channel_id(message):
     try:
         dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
@@ -295,58 +313,6 @@ def del_channel_id(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-        
-@bot.message_handler(commands=['link'])
-def list_channels(message):
-    link = "https://www.dropbox.com/sh/zhjlyve0ak9lpn6/AAATEZLXs00tUowdEpZdP6mua?dl=0"
-    bot.send_message(message.chat.id, text = link)
-@bot.message_handler(commands=['list'])
-def list_channels(message):
-    strrrr = ""
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
-    df = df.drop(columns=['id канала'])
-    for i in range(0, df.shape[0]):
-         strr = df.iloc[i].to_string()
-         strrr = ' '.join(strr.split()) + '\n' + '\n'
-         strrr = strrr.replace('Название канала', ' ')
-         strrr = strrr.replace('Тег админа', '\nАдмин - ')
-         strrr = strrr.replace('Имя админа', ' ')
-         strrr = strrr.replace('Тег канала', 'Канал ')
-         strrr = strrr.replace('Категория', '\nКатегории:')
-         strrrr += strrr
-#         strr = df.to_string()
-#         strrr = ' '.join(strr.split())
-    bot.send_message(message.chat.id, text = strrrr)
-#     except:
-#         bot.send_message(message.chat.id, text = "Произошла ошибка!")
- 
-@bot.message_handler(commands = ['help'])
-def help(message):
-    message1 = "Порядок действий: \n" 
-    message2 = "1 Добавить бота на каналы и сделать админом \n" 
-    message3 = "2 Переслать пост с канала боту в лс "  
-    message4 = "3 Прописать команду <code> /edit_category ? id канала ? категории </code> канала ВНУТРИ ЛС БОТА \n \n \n"
-    message5 = "" 
-    message6 = "<code> /add_chat </code> - добавить ЧАТ для рассылки, но нужно быть суперадмином \n"
-    message7 = "<code> /add_admin </code> - добавить суперадмина \n"
-    message8 = "<code> /edit... ? id ? value </code> - изменить параметр value канала с соответсвующим id, возможные варианты доступны по нажатию <code> / </code> \n "
-    message9 = " <code> /del_channel ? id </code> - удалить канал, но нужно быть суперадмином \n" 
-    message10 = "<code> /del_chat </code> - удалить текущий чат, но нужно быть суперадмином \n" 
-    message11 = "<code> /get_id </code> - внутри чата, получить свой текущий id, на канале - id канала \n" 
-    message12 = "<code> /link </code> - ссылка на базу данных \n"  
-    message13 = "<code> /list </code> - список каналов \n" 
-    text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11 + message12 + message13
-    bot.send_message(message.chat.id, text = text, parse_mode = "HTML")
-
-@bot.message_handler(commands=['get_id'])
-def get_user_id(message):
-    bot.send_message(message.chat.id, str(message.from_user.id))
-
-
-@bot.channel_post_handler(commands=['get_id'])
-def get_channel_id(message):
-    bot.send_message(message.chat.id, str(message.chat.id))        
 # dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
 # df = pd.DataFrame(columns=['id канала', 'Тег канала', 'Название канала', 'Тег админа', 'Имя админа', 'Категория'])
 # df.loc[df.shape[0]] = ['0', '0', '0', '0', '0', '0']
@@ -380,36 +346,60 @@ def reposts(message):
             for index, row in chats.iterrows():
                 print("FIFTH IF")
                 bot.send_message(chat_id = row['id'], text = text)
-                
-@bot.message_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])        
-def add_channel_id_by_forward(message):        
-    if (message.forward_from_chat != None and message.chat.type == 'private'):
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
-        for index, row in df.iterrows():
-            if row['id канала'] == message.forward_from_chat.id:
-                bot.send_message(message.chat.id, text = "Канал уже добавлен!")
-                return
-        channel_id = message.forward_from_chat.id
-        channel_tag = "@" + str(message.forward_from_chat.username).replace("@", "")
-        channel_title = message.forward_from_chat.title
-        admin_tag = "@" + str(message.from_user.username).replace("@", "")
-        print(message.from_user.first_name)
-        print( message.from_user.last_name)
-        admin_title = message.from_user.first_name   
-        print(df)
-        df = df.append({'id канала': channel_id, 'Тег канала': channel_tag, 'Название канала' : channel_title, 'Тег админа':admin_tag, 'Имя админа' : admin_title, 'Категория' : "Empty"}, ignore_index = True)
-#         df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
-#         print(df.loc[df.shape[0]])
-        df.to_excel("Book.xlsx", sheet_name = "channels")
-        dbx = dropbox_connect()
-        dbx.files_delete("/hitler-bot/Book.xlsx")
-        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx") 
-        bot.send_message(message.chat.id, text = "Операция успешна, id канала: " + str(channel_id))
-        print(df)
-#     except:
-#     bot.send_message(message.chat.id, text = "Произошла ошибка!")                        
-                
 bot.polling(none_stop=True)
 
 
+
+@bot.message_handler(commands=['link'])
+def list_channels(message):
+    link = "https://www.dropbox.com/sh/zhjlyve0ak9lpn6/AAATEZLXs00tUowdEpZdP6mua?dl=0"
+    bot.send_message(message.chat.id, text = link)
+@bot.message_handler(commands=['list'])
+def list_channels(message):
+    telegraph = Telegraph()
+    telegraph.create_account(short_name='1488')
+    strrrr = ""
+    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
+    df = pd.read_excel('Book.xlsx', index_col=0)
+    df = df.drop(columns=['id канала'])
+    for i in range(0, df.shape[0]):
+         strr = df.iloc[i].to_string()
+         strrr = ' '.join(strr.split()) + '<br>' + '<br>'
+         strrr = strrr.replace('Название канала', ' ')
+         strrr = strrr.replace('Тег админа', '<br> Админ - ')
+         strrr = strrr.replace('Имя админа', ' ')
+         strrr = strrr.replace('Тег канала', 'Канал ')
+         strrr = strrr.replace('Категория', '<br> Категории:')
+         strrrr += strrr
+#         strr = df.to_string()
+#         strrr = ' '.join(strr.split())
+    telegraph.edit_page("https://telegra.ph/channels-list-02-01", "Список каналов", html_content="<p>" + strrrr + "</p>")
+    bot.send_message(message.chat.id, text = "https://telegra.ph/channels-list-02-01")
+#     except:
+#         bot.send_message(message.chat.id, text = "Произошла ошибка!")
+ 
+@bot.message_handler(commands = ['help'])
+def help(message):
+    message1 = "Порядок действий: \n" 
+    message2 = "1. Добавить бота на каналы и прописать НА КАНАЛЕ: \n" 
+    message3 = "/ addChannel ? @тег админа ? имя админа ? категория канала \n" 
+    message4 = "2. / addChat внутри ЧАТА куда будут пересылаться сообщения \n" 
+    message5 = "/ addChannel ? @тег админа ? имя админа ? категория канала - добавить КАНАЛ в список"
+    message6 = "/ addChat - добавить ЧАТ (нужно быть суперадмином)"
+    message7 = "/ addAdmin - добавить суперадмина \n"
+    message8 = "/ delChannel <id> - удалить канал, нужно быть суперадмином (можно на канале без использования id) \n" 
+    message9 = "/ delChat - удалить текущий чат (нужно быть суперадмином) \n" 
+    message10 = "/ getId - внутри чата, получить свой текущий id, на канале - id канала \n" 
+    message11 = "/ link - ссылка на базу данных \n"  
+    message12 = "/ list - список каналов \n" 
+    text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11
+    bot.send_message(message.chat.id, text = text)
+
+@bot.message_handler(commands=['getId'])
+def get_user_id(message):
+    bot.send_message(message.chat.id, str(message.from_user.id))
+
+
+@bot.channel_post_handler(commands=['getId'])
+def get_channel_id(message):
+    bot.send_message(message.chat.id, str(message.chat.id))
