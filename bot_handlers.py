@@ -246,7 +246,7 @@ def del_channel(message):
         admins = pd.read_excel("Admins.xlsx", index_col= 0)
         for index, row in admins.iterrows():
             if row['id канала'] == message.from_user.id:
-                id_ = message.text.split()[1]
+                id_ = message.text.split("?")[1]
                 i = df[df['id канала'] == id_].index.values
                 df.drop(i, axis = 0, inplace = True)
                 df.to_excel("Book.xlsx", sheet_name = "channels")
