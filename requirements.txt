@@ -2,3 +2,4 @@ pytelegrambotapi
 dropbox
 pandas
 openpyxl
+telegraph
