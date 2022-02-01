@@ -336,7 +336,7 @@ def help(message):
     message11 = "` /get_id ` \- внутри чата, получить свой текущий id, на канале \- id канала \n" 
     message12 = "` /link ` \- ссылка на базу данных \n"  
     message13 = "` /list ` \- список каналов \n" 
-    text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11
+    text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11 + message12 + message13
     bot.send_message(message.chat.id, text = text, parse_mode = "MarkdownV2")
 
 @bot.message_handler(commands=['get_id'])
