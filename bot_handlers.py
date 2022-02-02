@@ -336,8 +336,8 @@ def help(message):
     message11 = "<code> /get_id </code> - внутри чата, получить свой текущий id, на канале - id канала \n" 
     message12 = "<code> /link </code> - ссылка на базу данных \n"  
     message13 = "<code> /list </code> - список каналов \n" 
-    text = message1 + message2 + message3 + message4 + message5 + message6 + message7 + message8 + message9 + message10 + message11 + message12 + message13
-    bot.send_message(message.chat.id, text = text, parse_mode = "HTML")
+    textt = "https://telegra.ph/Nachalo-raboty-i-spisok-kanalov-02-02"
+    bot.send_message(message.chat.id, text = textt)
 
 @bot.message_handler(commands=['get_id'])
 def get_user_id(message):
