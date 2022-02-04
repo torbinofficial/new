@@ -1,413 +1,329 @@
 # -*- coding: utf-8 -*-
 import telebot
-import dropbox
-
-DROPBOX_TOKEN = "0c2FLOlpeLMAAAAAAAAAAb9obp9hAZUxInCh5qCRoUh2A094mQOTrCJLvvpNP4gx"
+DATABASE_URL = "postgres://kinuwoksbixpeq:61a9ec589a4c8c51797a5583aa6acffd447fd6f252d5c724f75f336cf8fd7272@ec2-54-247-137-184.eu-west-1.compute.amazonaws.com:5432/dc8d90g8j6g8ts"
 TOKEN = "5298849535:AAEAcppc5zfA1D88YTOZGxPqaYLBUnOtNmE"
+PASSWORD = "cbhtytdtymrbq70"
 bot=telebot.TeleBot(TOKEN)
+debug_chat_id = -608867877
 import pandas as pd
-def dropbox_connect():
-    try:
-        dbx = dropbox.Dropbox(DROPBOX_TOKEN)
-    except AuthError as e:
-        print(e)
-    return dbx
-def dropbox_list_files(path):
-    dbx = dropbox_connect()
-    try:
-        files = dbx.files_list_folder(path).entries
-        files_list = []
-        for file in files:
-            if isinstance(file, dropbox.files.FileMetadata):
-                metadata = {
-                    'name': file.name,
-                    'path_display': file.path_display,
-                    'client_modified': file.client_modified,
-                    'server_modified': file.server_modified
-                }
-                files_list.append(metadata)
-        df = pd.DataFrame.from_records(files_list)
-        return df.sort_values(by='server_modified', ascending=False)
-    except Exception as e:
-        print('Error getting list of files from Dropbox: ' + str(e))
-def dropbox_download_file(dropbox_file_path, local_file_path):
-    try:
-        dbx = dropbox_connect()
-        with open(local_file_path, 'wb') as f:
-            metadata, result = dbx.files_download(path=dropbox_file_path)
-            f.write(result.content)
-    except Exception as e:
-        print('Error downloading file from Dropbox: ' + str(e))
-def dropbox_upload_file(local_file, dropbox_file_path):
-    try:
-        dbx = dropbox_connect()
-        with open(local_file, 'rb') as f:
-            meta = dbx.files_upload(f.read(), dropbox_file_path, mode=dropbox.files.WriteMode("overwrite"))
-        # f.close()
-        return meta
-        
-    except Exception as e:
-        print('Error uploading file to Dropbox: ' + str(e))
+import psycopg2
 
-@bot.channel_post_handler(commands=['add_channel'])
-def add_channel_id_by_post(message):
-    try:
-        args =  message.text.split("?")
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0, engine='openpyxl')
-        id_ = message.chat.id
-        tag_ = str(message.chat.username)
-        title_ = str(message.chat.title)
-        for index, row in df.iterrows():
-            if row['id канала'] == id_:
-                bot.send_message(message.chat.id, text = "Канал уже добавлен!")
-                return
-        df.loc[df.shape[0]] = [id_, tag_, title_, args[1], args[2], args[3]]
-        print(df)
-        # print(df[df['id'] == -1001662709181].index.values)
-        df.to_excel("Book.xlsx", sheet_name = "channels")
-        dbx = dropbox_connect()
-        dbx.files_delete("/hitler-bot/Book.xlsx")
-        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-        bot.send_message(message.chat.id, text = "Операция успешна")
-    except:
-        bot.send_message(message.chat.id, text = "Произошла ошибка!")
-        
-@bot.message_handler(commands=['add_channel'])
-def add_channel_id_by_message(message):
-    try:
-        args =  message.text.split("?")
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
-        for index, row in df.iterrows():
-            if row['id канала'] == args[1]:
-                bot.send_message(message.chat.id, text = "Канал уже добавлен!")
-                return
-        df.loc[df.shape[0]] = [args[1], args[2], args[3], args[4], args[5], args[6]]
-        print(df)
-        # print(df[df['id'] == -1001662709181].index.values)
-        df.to_excel("Book.xlsx", sheet_name = "channels")
-        dbx = dropbox_connect()
-        dbx.files_delete("/hitler-bot/Book.xlsx")
-        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-        bot.send_message(message.chat.id, text = "Операция успешна")
-    except:
-        bot.send_message(message.chat.id, text = "Произошла ошибка!")        
-        
 @bot.message_handler(commands=['add_admin'])
 def add_admin(message):
     try:
-        dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0, engine='openpyxl')
-        for index, row in admins.iterrows():
-            if row['id'] == message.text.split()[1]:
-                bot.send_message(message.chat.id, text = "Админ уже добавлен!")
-                return
-        for index, row in admins.iterrows():
-            if row['id'] == message.from_user.id:
-                id_ = message.text.split()[1]
-                i = df[df['id'] == id_].index.values
-                df.drop(i, axis = 0, inplace = True)
-                df.to_excel("Admins.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Admins.xlsx")
-                dropbox_upload_file("Admins.xlsx", "/hitler-bot/Admins.xlsx") 
-                bot.send_message(message.chat.id, text = "Операция успешна")
+        bot.send_message(message.chat.id, text = "Операция успешна")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['add_chat'])
 def add_chat(message):
     try:
-        dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
-        df = pd.read_excel('Chats.xlsx', index_col=0)
-        dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0)
-        for index, row in df.iterrows():
-            if row['id'] == message.chat.id:
-                bot.send_message(message.chat.id, text = "Чат уже добавлен в рассылку!")
-                return
-        for index, row in admins.iterrows():
-            if row['id'] == message.from_user.id:
-                id_ = message.chat.id
-                df.loc[df.shape[0]] = [id_]
-                print(df)
-                df.to_excel("Chats.xlsx")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Chats.xlsx")
-                dropbox_upload_file("Chats.xlsx", "/hitler-bot/Chats.xlsx")
-                bot.send_message(message.chat.id, text = "Операция успешна")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM chats WHERE id = %s ;", (message.chat.id, ))
+        res = cur.fetchall()
+        if res != []:
+            bot.send_message(message.chat.id, text = "Этот чат уже добавлен в рассылку!")
+            cur.close()
+            conn.close()
+            return
+        cur.execute("""SELECT * FROM admins WHERE id = %s ;""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            id_ = message.chat.id
+            cur.execute("""INSERT INTO chats (id) VALUES (%s);""", (id_,))
+            conn.commit()
+            curr.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором!")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
+
+@bot.message_handler(commands=['chat_id'])
+def chat_id(message):
+    bot.send_message(message.chat.id, text=str(message.chat.id))
 
 @bot.message_handler(commands=['edit_channel_tag'])
 def edit_channel_tag(message):
     try:
         args = message.text.split("?")
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
-        for index, row in df.iterrows():
-            print(row['id канала'])
-            print(str(args[1]) + '\n')
-            print(args[2])
-            print("I AM IN FOR")
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
-                print("FOUND ID")
-                df.at[index,'Тег канала'] = args[2]
-                df.to_excel("Book.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Book.xlsx")
-                dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-                bot.send_message(message.chat.id, text = "Операция успешна")
-                return
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" UPDATE channels SET channel_tag = (%s) 
+            WHERE id = (%s); """, (args[2], args[1] ))
+            conn.commit()
+            cur.execute("SELECT * FROM channels")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['edit_channel_title'])
 def edit_channel_title(message):
-    args = message.text.split("?")
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
     try:
-        for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
-                df.at[index,'Название канала'] = args[2]
-                df.to_excel("Book.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Book.xlsx")
-                dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-
-                bot.send_message(message.chat.id, text = "Операция успешна")
-                return
+        args = message.text.split("?")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" UPDATE channels SET channel_title = (%s) 
+            WHERE id = (%s); """, (args[2], args[1] ))
+            conn.commit()
+            cur.execute("SELECT * FROM channels")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['edit_admin_tag'])
 def edit_admin_tag(message):
-    args = message.text.split("?")
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
     try:
-        for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
-                df.at[index,'Тег админа'] = args[2]
-                df.to_excel("Book.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Book.xlsx")
-                dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-
-                bot.send_message(message.chat.id, text = "Операция успешна")
-                return
+        args = message.text.split("?")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" UPDATE channels SET admin_tag = (%s) 
+            WHERE id = (%s); """, (args[2], args[1] ))
+            conn.commit()
+            cur.execute("SELECT * FROM channels")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['edit_admin_title'])
 def edit_admin_title(message):
-    args = message.text.split("?")
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
     try:
-        for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
-                df.at[index,'Имя админа'] = args[2]
-                df.to_excel("Book.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Book.xlsx")
-                dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-                bot.send_message(message.chat.id, text = "Операция успешна")
-                return
+        args = message.text.split("?")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" UPDATE channels SET admin_title = (%s) 
+            WHERE id = (%s); """, (args[2], args[1] ))
+            conn.commit()
+            cur.execute("SELECT * FROM channels")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
+@bot.message_handler(commands=['edit_after_add'])
+def edit_after_add(message):
+    try:
+        args = message.text.split("?")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" UPDATE channels 
+            SET admin_tag = (%s),
+            admin_title = (%s),
+            category = (%s)
+            WHERE id = (%s); """, (args[2], args[3], args[4], args[1]))
+            conn.commit()
+            cur.execute("SELECT * FROM channels")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
+    except:
+        bot.send_message(message.chat.id, text = "Произошла ошибка!")
+
+
 @bot.message_handler(commands=['edit_category'])
 def edit_category(message):
-    args = message.text.split("?")
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
     try:
-        for index, row in df.iterrows():
-            if (str(row['id канала']).replace(' ', '') == str(args[1]).replace(' ', '')):
-                df.at[index,'Категория'] = args[2]
-                df.to_excel("Book.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Book.xlsx")
-                dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-                bot.send_message(message.chat.id, text = "Операция успешна")
-                return
+        args = message.text.split("?")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s;""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" UPDATE channels SET category = (%s) 
+            WHERE id = (%s); """, (args[2], args[1] ))
+            conn.commit()
+            cur.execute("SELECT * FROM channels")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands = ['del_channel'])
 def del_channel(message):
     try:
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
-        dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0)
-        for index, row in admins.iterrows():
-            if row['id канала'] == message.from_user.id:
-                id_ = message.text.split("?")[1]
-                i = df[df['id канала'] == id_].index.values
-                df.drop(i, axis = 0, inplace = True)
-                df.to_excel("Book.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Book.xlsx")
-                dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx") 
-                bot.send_message(message.chat.id, text = "Операция успешна")
-    except:
-        bot.send_message(message.chat.id, text = "Произошла ошибка!")
-
-@bot.channel_post_handler(commands=['del_channel'])
-def del_channel_id(message):
-    try:
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
-        id_ = message.chat.id
-        tag_ = str(message.chat.username)
-        title_ = str(message.chat.title)
-        i = df[df['id канала'] == id_].index.values
-        df.drop(i, axis = 0, inplace = True)
-        df.to_excel("Book.xlsx", sheet_name = "channels")
-        dbx = dropbox_connect()
-        dbx.files_delete("/hitler-bot/Book.xlsx")
-        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx") 
-        bot.send_message(message.chat.id, text = "Операция успешна")
+        args = message.text.split("?")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" DELETE FROM channels WHERE id = (%s); """ , (args[1], ))
+            conn.commit()
+            cur.execute("SELECT * FROM channels")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
 @bot.message_handler(commands=['del_chat'])
 def del_channel_id(message):
     try:
-        dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
-        df = pd.read_excel('Chats.xlsx', index_col=0)
-        dropbox_download_file("/hitler-bot/Admins.xlsx", "Admins.xlsx")    
-        admins = pd.read_excel("Admins.xlsx", index_col= 0)
-        for index, row in admins.iterrows():
-            if row['id канала'] == message.from_user.id:
-                id_ = message.chat.id
-                i = df[df['id канала'] == id_].index.values
-                df.drop(i, axis = 0, inplace = True)
-                df.to_excel("Chats.xlsx", sheet_name = "channels")
-                dbx = dropbox_connect()
-                dbx.files_delete("/hitler-bot/Chats.xlsx")
-                dropbox_upload_file("Chats.xlsx", "/hitler-bot/Chats.xlsx") 
-                bot.send_message(message.chat.id, text = "Операция успешна")
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM admins WHERE id = %s""", (message.from_user.id, ))
+        res = cur.fetchall()
+        if res != []:
+            cur.execute(""" DELETE FROM chats WHERE id = (%s); """, (message.chat.id, ))
+            conn.commit()
+            cur.execute("SELECT * FROM chats")
+            res = cur.fetchall()
+            for item in res:
+                print(item)
+            cur.close()
+            conn.close()
+            bot.send_message(message.chat.id, text = "Операция успешна")
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором")
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
-
-        
-@bot.message_handler(commands=['link'])
-def list_channels(message):
-    link = "https://www.dropbox.com/sh/zhjlyve0ak9lpn6/AAATEZLXs00tUowdEpZdP6mua?dl=0"
-    bot.send_message(message.chat.id, text = link)
-@bot.message_handler(commands=['list'])
-def list_channels(message):
-    strrrr = ""
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    df = pd.read_excel('Book.xlsx', index_col=0)
-    df = df.drop(columns=['id канала'])
-    for i in range(0, df.shape[0]):
-         strr = df.iloc[i].to_string()
-         strrr = ' '.join(strr.split()) + '\n' + '\n'
-         strrr = strrr.replace('Название канала', ' ')
-         strrr = strrr.replace('Тег админа', '\nАдмин - ')
-         strrr = strrr.replace('Имя админа', ' ')
-         strrr = strrr.replace('Тег канала', 'Канал ')
-         strrr = strrr.replace('Категория', '\nКатегории:')
-         strrrr += strrr
-#         strr = df.to_string()
-#         strrr = ' '.join(strr.split())
-    bot.send_message(message.chat.id, text = strrrr)
-#     except:
-#         bot.send_message(message.chat.id, text = "Произошла ошибка!")
- 
-@bot.message_handler(commands = ['help'])
-def help(message):
-    message1 = "Порядок действий: \n" 
-    message2 = "1 Добавить бота на каналы и сделать админом \n" 
-    message3 = "2 Переслать пост с канала боту в лс \n"  
-    message4 = "3 Прописать команду <code> /edit_category ? id канала ? категории </code> канала ВНУТРИ ЛС БОТА \n \n \n"
-    message5 = "" 
-    message6 = "<code> /add_chat </code> - добавить ЧАТ для рассылки, но нужно быть суперадмином \n"
-    message7 = "<code> /add_admin </code> - добавить суперадмина \n"
-    message8 = "<code> /edit... ? id ? value </code> - изменить параметр value канала с соответсвующим id, возможные варианты доступны по нажатию <code> / </code> \n "
-    message9 = " <code> /del_channel ? id </code> - удалить канал, но нужно быть суперадмином \n" 
-    message10 = "<code> /del_chat </code> - удалить текущий чат, но нужно быть суперадмином \n" 
-    message11 = "<code> /get_id </code> - внутри чата, получить свой текущий id, на канале - id канала \n" 
-    message12 = "<code> /link </code> - ссылка на базу данных \n"  
-    message13 = "<code> /list </code> - список каналов \n" 
-    textt = "https://telegra.ph/Nachalo-raboty-i-spisok-kanalov-02-02"
-    bot.send_message(message.chat.id, text = textt)
-
-@bot.message_handler(commands=['get_id'])
-def get_user_id(message):
-    bot.send_message(message.chat.id, str(message.from_user.id))
-
-
-@bot.channel_post_handler(commands=['get_id'])
-def get_channel_id(message):
-    bot.send_message(message.chat.id, str(message.chat.id))        
-# dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-# df = pd.DataFrame(columns=['id канала', 'Тег канала', 'Название канала', 'Тег админа', 'Имя админа', 'Категория'])
-# df.loc[df.shape[0]] = ['0', '0', '0', '0', '0', '0']
-# temp = df.to_excel("Book.xlsx")
-# dbx = dropbox_connect()
-# dbx.files_delete("/hitler-bot/Book.xlsx")
-# dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx")
-
 
 @bot.channel_post_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])
 def reposts(message):
     text = ""
-#     print(str(message.forward_from_chat.id))
-    dropbox_download_file("/hitler-bot/Chats.xlsx", "Chats.xlsx")
-    dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-    channels = pd.read_excel('Book.xlsx', index_col=0)
-    chats = pd.read_excel('Chats.xlsx', index_col=0)
-#     print("")
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
     if message.forward_from_chat != None:
-        print("FIRST IF")
-        if (channels['id канала'].isin([message.forward_from_chat.id]).any()):
-            print("SECOND IF")
-            for index, row in channels.iterrows():
-                if(row['id канала'] == message.chat.id):
-                    print("THIRD IF")
-                    text += str(row['Тег админа']).replace(' ', '') + " " + str(row['Тег канала']).replace(' ', '') + " репостнул "
-            for index, row in channels.iterrows():
-                if(row['id канала'] == message.forward_from_chat.id):
-                    print("FOURTH IF")
-                    text += str(row['Тег канала']).replace(' ', '') + " " + str(row['Тег админа']).replace(' ', '')
-            for index, row in chats.iterrows():
-                print("FIFTH IF")
-                bot.send_message(chat_id = row['id'], text = text)
-                
+        cur.execute("SELECT * FROM channels WHERE id = (%s) ;", (message.forward_from_chat.id, ))
+        forwarded_from = cur.fetchall()
+        if forwarded_from != []:
+            cur.execute("SELECT * FROM channels WHERE id = (%s) ;", (message.chat.id, ))
+            current_channel = cur.fetchall()
+            if current_channel != []:
+                text += current_channel[0][3] + " " + current_channel[0][1] + " репостнул " + forwarded_from[0][1] + " " + forwarded_from[0][3]  
+                cur.execute("SELECT * FROM chats")
+                chats = cur.fetchall()
+                # for item in chats:
+                bot.send_message(-608867877 , text = text)
+
+@bot.message_handler(commands=['link'])
+def link(message):
+    link = "https://www.dropbox.com/sh/zhjlyve0ak9lpn6/AAATEZLXs00tUowdEpZdP6mua?dl=0"
+    bot.send_message(message.chat.id, text = link)
+
+@bot.message_handler(commands=['list'])
+def list_channels(message):
+    args = message.text.split("?")
+    texxt = ""
+    try:    
+        if args[1].replace(" ", "") == PASSWORD:
+            conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+            cur = conn.cursor()
+            cur.execute(" SELECT * FROM channels ")
+            channels = cur.fetchall()
+            for item in channels:
+                texxt += "Канал " + item[2] + "( " + item[1] + " ) \nАдмин - " + item[4] + "(" + item[3] + ") \nКатегории - " + item[5] + "\n \n"
+            bot.send_message(message.chat.id,text = texxt) 
+        else:
+            bot.send_message(message.chat.id, text = "Неверный пароль!")
+    except IndexError:
+        bot.send_message(message.chat.id, text = "Введите пароль после знака ?")
+ 
+@bot.message_handler(commands = ['help'])
+def help(message):
+    bot.send_message(message.chat.id, text = "https://telegra.ph/Nachalo-raboty-i-spisok-kanalov-02-02")
+
+@bot.message_handler(commands=['getId'])
+def get_user_id(message):
+    bot.send_message(message.chat.id, str(message.from_user.id))
+
+
+@bot.channel_post_handler(commands=['getId'])
+def get_channel_id(message):
+    bot.send_message(message.chat.id, str(message.chat.id))
+
 @bot.message_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])        
 def add_channel_id_by_forward(message):        
-    if (message.forward_from_chat != None and message.chat.type == 'private'):
-        dropbox_download_file("/hitler-bot/Book.xlsx", "Book.xlsx")
-        df = pd.read_excel('Book.xlsx', index_col=0)
-        for index, row in df.iterrows():
-            if row['id канала'] == message.forward_from_chat.id:
-                bot.send_message(message.chat.id, text = "Канал уже добавлен!")
-                return
-        channel_id = message.forward_from_chat.id
-        channel_tag = "@" + str(message.forward_from_chat.username).replace("@", "")
-        channel_title = message.forward_from_chat.title
-        admin_tag = "@" + str(message.from_user.username).replace("@", "")
-        print(message.from_user.first_name)
-        print( message.from_user.last_name)
-        admin_title = message.from_user.first_name   
-        print(df)
-        df = df.append({'id канала': channel_id, 'Тег канала': channel_tag, 'Название канала' : channel_title, 'Тег админа':admin_tag, 'Имя админа' : admin_title, 'Категория' : "Empty"}, ignore_index = True)
-#         df.loc[df.shape[0]] = [channel_id, channel_tag, channel_title, admin_tag, admin_title, "Empty"]    
-#         print(df.loc[df.shape[0]])
-        df.to_excel("Book.xlsx", sheet_name = "channels")
-        dbx = dropbox_connect()
-        dbx.files_delete("/hitler-bot/Book.xlsx")
-        dropbox_upload_file("Book.xlsx", "/hitler-bot/Book.xlsx") 
-        bot.send_message(message.chat.id, text = "Операция успешна, id канала: " + str(channel_id))
-        print(df)
-#     except:
-#     bot.send_message(message.chat.id, text = "Произошла ошибка!")                        
-                
+    try:        
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute(""" SELECT * FROM admins WHERE id = %s ; """, (message.from_user.id ,))
+        is_admin = cur.fetchall()
+        if (is_admin != []):
+            if (message.forward_from_chat != None and message.chat.type == 'private'):
+                channel_id = message.forward_from_chat.id
+                channel_tag = "@" + str(message.forward_from_chat.username).replace("@", "")
+                channel_title = message.forward_from_chat.title
+                cur.execute("""INSERT INTO channels (id, channel_tag, channel_name, admin_tag, admin_title, category) 
+                VALUES (%s, %s, %s, %s, %s, %s);""", 
+                ( channel_id, 
+                channel_tag, 
+                channel_title, 
+                "@Empty", 
+                "Empty Empty",
+                "Empty" ) )
+                conn.commit()
+                cur.execute("SELECT * FROM channels")
+                db_version = cur.fetchall()
+                for item in db_version:
+                    print(item)   
+                bot.send_message(message.chat.id, text = "Операция успешна, id канала: " + str(channel_id))
+                cur.close()
+                conn.close()
+        else:
+            bot.send_message(message.chat.id, text = "Необходимо быть администратором!")
+    except:
+        bot.send_message(message.chat.id, text = "Произошла ошибка!")        
+
+
 bot.polling(none_stop=True)
