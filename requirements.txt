@@ -3,3 +3,4 @@ dropbox
 pandas
 openpyxl
 telegraph
+psycopg2
