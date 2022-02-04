@@ -253,8 +253,8 @@ def reposts(message):
                 text += current_channel[0][3] + " " + current_channel[0][1] + " репостнул " + forwarded_from[0][1] + " " + forwarded_from[0][3]  
                 cur.execute("SELECT * FROM chats")
                 chats = cur.fetchall()
-                # for item in chats:
-                bot.send_message(-608867877 , text = text)
+                for item in chats:
+                    bot.send_message(item[0] , text = text)
 
 @bot.message_handler(commands=['link'])
 def link(message):
