@@ -238,7 +238,7 @@ def del_channel_id(message):
     except:
         bot.send_message(message.chat.id, text = "Произошла ошибка!")
 
-@bot.channel_post_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])
+@bot.channel_post_handler(content_types=["animation", "text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])
 def reposts(message):
     text = ""
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -292,7 +292,7 @@ def get_user_id(message):
 def get_channel_id(message):
     bot.send_message(message.chat.id, str(message.chat.id))
 
-@bot.message_handler(content_types=["text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])        
+@bot.message_handler(content_types=["animation","text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])        
 def add_channel_id_by_forward(message):        
     try:        
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
