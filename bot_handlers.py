@@ -295,13 +295,13 @@ def get_channel_id(message):
 @bot.message_handler(content_types=["animation","text", "audio", "document", "photo", "sticker", "video", "video_note", "voice", "location", "contact", "new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "supergroup_chat_created", "channel_chat_created", "migrate_to_chat_id", "migrate_from_chat_id" , "pinned_message"])        
 def add_channel_id_by_forward(message):        
     try:    
-        if (message.chat.type == 'private')
+        if (message.chat.type == 'private'):
             conn = psycopg2.connect(DATABASE_URL, sslmode='require')
             cur = conn.cursor()
             cur.execute(""" SELECT * FROM admins WHERE id = %s ; """, (message.from_user.id ,))
             is_admin = cur.fetchall()
             if (is_admin != []):
-                if (message.forward_from_chat != None and message.chat.type == 'private'):
+                if (message.forward_from_chat != None):
                     channel_id = message.forward_from_chat.id
                     channel_tag = "@" + str(message.forward_from_chat.username).replace("@", "")
                     channel_title = message.forward_from_chat.title
